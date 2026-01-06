@@ -1,10 +1,14 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuthStore } from '../stores/auth.store';
 import ErrorAlert from '../components/ErrorAlert';
-import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -30,7 +34,7 @@ export default function RegisterPage() {
     return null;
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
     setValidationErrors({});
@@ -66,98 +70,89 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 dark:bg-gray-900">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-            Registro
-          </h2>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <ErrorAlert message={error || ''} onClose={clearError} />
-          <div className="space-y-4 rounded-md shadow-sm">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Nombre
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                placeholder="John Doe"
-              />
-              {validationErrors.name && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.name}</p>
-              )}
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-3xl text-center">Registro</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <ErrorAlert message={error || ''} onClose={clearError} />
+            
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Nombre</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="John Doe"
+                />
+                {validationErrors.name && (
+                  <p className="text-sm text-destructive">{validationErrors.name}</p>
+                )}
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="user@example.com"
+                />
+                {validationErrors.email && (
+                  <p className="text-sm text-destructive">{validationErrors.email}</p>
+                )}
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="password">Contraseña</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password123!"
+                />
+                {validationErrors.password && (
+                  <p className="text-sm text-destructive">{validationErrors.password}</p>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  Mínimo 8 caracteres, una mayúscula, un número y un carácter especial (@$!%*?&)
+                </p>
+              </div>
             </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                placeholder="user@example.com"
-              />
-              {validationErrors.email && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.email}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Contraseña
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
-                placeholder="Password123!"
-              />
-              {validationErrors.password && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.password}</p>
-              )}
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Mínimo 8 caracteres, una mayúscula, un número y un carácter especial (@$!%*?&)
-              </p>
-            </div>
-          </div>
 
-          <div>
-            <button
+            <Button
               type="submit"
+              className="w-full"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Registrando...' : 'Registrarse'}
-            </button>
-          </div>
+            </Button>
 
-          <div className="text-center">
-            <Link
-              href="/login"
-              className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400"
-            >
-              ¿Ya tienes cuenta? Inicia sesión
-            </Link>
-          </div>
-        </form>
-      </div>
+            <div className="text-center text-sm">
+              <Link
+                href="/login"
+                className="text-primary hover:underline"
+              >
+                ¿Ya tienes cuenta? Inicia sesión
+              </Link>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
-

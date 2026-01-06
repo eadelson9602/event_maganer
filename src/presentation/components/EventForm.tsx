@@ -1,11 +1,17 @@
 'use client';
 
-import { useState, useEffect, FormEvent } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { useEventStore } from '../stores/event.store';
 import ErrorAlert from './ErrorAlert';
 import LoadingSpinner from './LoadingSpinner';
 import { Event } from '../../domain/entities/event.entity';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface EventFormProps {
   eventId?: number;
@@ -47,7 +53,7 @@ export default function EventForm({ eventId }: EventFormProps) {
     }
   }, [currentEvent, eventId]);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
     setValidationErrors({});
@@ -81,7 +87,7 @@ export default function EventForm({ eventId }: EventFormProps) {
         await createEvent(eventData);
       }
       router.push('/events');
-    } catch (err) {
+    } catch {
       // Error handled by store
     }
   };
@@ -91,108 +97,99 @@ export default function EventForm({ eventId }: EventFormProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12 dark:bg-gray-900">
+    <div className="min-h-screen bg-background px-4 py-12">
       <div className="mx-auto max-w-2xl">
         <div className="mb-6">
-          <button
+          <Button
+            variant="ghost"
             onClick={() => router.push('/events')}
-            className="text-blue-600 hover:text-blue-800 dark:text-blue-400"
           >
-            ← Volver a la lista
-          </button>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Volver a la lista
+          </Button>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <h1 className="mb-6 text-3xl font-bold text-gray-900 dark:text-white">
-            {eventId ? 'Editar Evento' : 'Nuevo Evento'}
-          </h1>
+        <Card>
+          <CardHeader>
+            <CardTitle>{eventId ? 'Editar Evento' : 'Nuevo Evento'}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <ErrorAlert message={error || ''} onClose={clearError} />
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <ErrorAlert message={error || ''} onClose={clearError} />
+              <div className="space-y-2">
+                <Label htmlFor="name">
+                  Nombre <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
+                {validationErrors.name && (
+                  <p className="text-sm text-destructive">{validationErrors.name}</p>
+                )}
+              </div>
 
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Nombre <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="name"
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              />
-              {validationErrors.name && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.name}</p>
-              )}
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="date">
+                  Fecha y Hora <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id="date"
+                  type="datetime-local"
+                  required
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                />
+                {validationErrors.date && (
+                  <p className="text-sm text-destructive">{validationErrors.date}</p>
+                )}
+              </div>
 
-            <div>
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Fecha y Hora <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="date"
-                type="datetime-local"
-                required
-                value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              />
-              {validationErrors.date && (
-                <p className="mt-1 text-sm text-red-600 dark:text-red-400">{validationErrors.date}</p>
-              )}
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Descripción</Label>
+                <Textarea
+                  id="description"
+                  rows={4}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                />
+              </div>
 
-            <div>
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Descripción
-              </label>
-              <textarea
-                id="description"
-                rows={4}
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="place">Lugar</Label>
+                <Input
+                  id="place"
+                  type="text"
+                  value={formData.place}
+                  onChange={(e) => setFormData({ ...formData, place: e.target.value })}
+                />
+              </div>
 
-            <div>
-              <label htmlFor="place" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Lugar
-              </label>
-              <input
-                id="place"
-                type="text"
-                value={formData.place}
-                onChange={(e) => setFormData({ ...formData, place: e.target.value })}
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              />
-            </div>
-
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isLoading ? 'Guardando...' : 'Guardar'}
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push('/events')}
-                className="rounded-md bg-gray-600 px-4 py-2 text-white hover:bg-gray-700"
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
+              <div className="flex gap-4">
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="flex-1"
+                >
+                  {isLoading ? 'Guardando...' : 'Guardar'}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => router.push('/events')}
+                  className="flex-1"
+                >
+                  Cancelar
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 }
-

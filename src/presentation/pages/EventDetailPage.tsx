@@ -2,9 +2,23 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
 import { useEventStore } from '../stores/event.store';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorAlert from '../components/ErrorAlert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface EventDetailPageProps {
   eventId: number;
@@ -23,13 +37,11 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
   }, [eventId, fetchEventById]);
 
   const handleDelete = async () => {
-    if (confirm('¿Estás seguro de que deseas eliminar este evento?')) {
-      try {
-        await deleteEvent(eventId);
-        router.push('/events');
-      } catch {
-        // Error handled by store
-      }
+    try {
+      await deleteEvent(eventId);
+      router.push('/events');
+    } catch {
+      // Error handled by store
     }
   };
 
@@ -50,77 +62,92 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
 
   if (!currentEvent) {
     return (
-      <div className="min-h-screen bg-gray-50 px-4 py-12 dark:bg-gray-900">
+      <div className="min-h-screen bg-background px-4 py-12">
         <div className="mx-auto max-w-2xl">
           <ErrorAlert message="Evento no encontrado" />
-          <button
-            onClick={() => router.push('/events')}
-            className="mt-4 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-          >
+          <Button onClick={() => router.push('/events')} className="mt-4">
             Volver a la lista
-          </button>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12 dark:bg-gray-900">
+    <div className="min-h-screen bg-background px-4 py-12">
       <div className="mx-auto max-w-2xl">
         <ErrorAlert message={error || ''} onClose={clearError} />
 
         <div className="mb-6">
-          <button
+          <Button
+            variant="ghost"
             onClick={() => router.push('/events')}
-            className="mb-4 text-blue-600 hover:text-blue-800 dark:text-blue-400"
+            className="mb-4"
           >
-            ← Volver a la lista
-          </button>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Volver a la lista
+          </Button>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow dark:bg-gray-800">
-          <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white">
-            {currentEvent.name}
-          </h1>
-
-          <div className="space-y-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-3xl">{currentEvent.name}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Fecha y Hora</h3>
-              <p className="text-lg text-gray-900 dark:text-white">{formatDate(currentEvent.date)}</p>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">Fecha y Hora</h3>
+              <p className="text-lg">{formatDate(currentEvent.date)}</p>
             </div>
 
             {currentEvent.place && (
               <div>
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Lugar</h3>
-                <p className="text-lg text-gray-900 dark:text-white">{currentEvent.place}</p>
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">Lugar</h3>
+                <p className="text-lg">{currentEvent.place}</p>
               </div>
             )}
 
             {currentEvent.description && (
               <div>
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Descripción</h3>
-                <p className="text-lg text-gray-900 dark:text-white">{currentEvent.description}</p>
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">Descripción</h3>
+                <p className="text-lg">{currentEvent.description}</p>
               </div>
             )}
-          </div>
 
-          <div className="mt-6 flex gap-4">
-            <button
-              onClick={() => router.push(`/events/${eventId}/edit`)}
-              className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-            >
-              Editar
-            </button>
-            <button
-              onClick={handleDelete}
-              className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-            >
-              Eliminar
-            </button>
-          </div>
-        </div>
+            <div className="flex gap-4 pt-4">
+              <Button
+                onClick={() => router.push(`/events/${eventId}/edit`)}
+                className="flex-1"
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                Editar
+              </Button>
+              
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" className="flex-1">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Eliminar
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta acción no se puede deshacer. Se eliminará permanentemente este evento.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                      Eliminar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 }
-
