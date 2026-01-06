@@ -80,7 +80,7 @@ describe("ErrorHandler", () => {
     const error = {};
     const result = ErrorHandler.processError(error, "Default error");
 
-    expect(result.message).toBe("Ha ocurrido un error inesperado");
+    expect(result.message).toBe("An unexpected error occurred");
     expect(result.status).toBe(0);
   });
 });
