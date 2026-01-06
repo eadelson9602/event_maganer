@@ -33,8 +33,8 @@ export class ErrorHandler {
       return this.formatBackendError(error);
     }
 
-    // Error desconocido
-    return 'Ha ocurrido un error inesperado';
+    // Unknown error
+    return 'An unexpected error occurred';
   }
 
   /**
@@ -89,13 +89,13 @@ export class ErrorHandler {
       }
     }
 
-    return 'Ha ocurrido un error';
+    return 'An error occurred';
   }
 
   /**
    * Procesa un error y retorna un HttpError normalizado
    */
-  static processError(error: unknown, defaultMessage: string = 'Ha ocurrido un error'): HttpError {
+  static processError(error: unknown, defaultMessage: string = 'An error occurred'): HttpError {
     const message = this.extractErrorMessage(error);
 
     // Si ya es un HttpError, retornarlo

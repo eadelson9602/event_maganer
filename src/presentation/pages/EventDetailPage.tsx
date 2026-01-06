@@ -36,9 +36,9 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
     return (
       <div className="min-h-screen bg-background px-4 py-12">
         <div className="mx-auto max-w-2xl">
-          <ErrorAlert message="Evento no encontrado" />
+          <ErrorAlert message="Event not found" />
           <Button onClick={() => router.push('/events')} className="mt-4">
-            Volver a la lista
+            Back to list
           </Button>
         </div>
       </div>
@@ -57,7 +57,7 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
             className="mb-4"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver a la lista
+            Back to list
           </Button>
         </div>
 
@@ -67,20 +67,20 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">Fecha y Hora</h3>
+              <h3 className="text-sm font-medium text-muted-foreground mb-1">Date and Time</h3>
               <p className="text-lg">{formatDate(event.date)}</p>
             </div>
 
             {event.place && (
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">Lugar</h3>
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">Place</h3>
                 <p className="text-lg">{event.place}</p>
               </div>
             )}
 
             {event.description && (
               <div>
-                <h3 className="text-sm font-medium text-muted-foreground mb-1">Descripción</h3>
+                <h3 className="text-sm font-medium text-muted-foreground mb-1">Description</h3>
                 <p className="text-lg">{event.description}</p>
               </div>
             )}
@@ -91,27 +91,27 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
                 className="flex-1"
               >
                 <Edit className="mr-2 h-4 w-4" />
-                Editar
+                Edit
               </Button>
               
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="destructive" className="flex-1">
                     <Trash2 className="mr-2 h-4 w-4" />
-                    Eliminar
+                    Delete
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Esta acción no se puede deshacer. Se eliminará permanentemente este evento.
+                      This action cannot be undone. This will permanently delete this event.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction onClick={deleteEvent} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                      Eliminar
+                      Delete
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>

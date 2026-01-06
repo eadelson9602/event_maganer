@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useEventStore } from '../../stores/event.store';
 
 export function useEventDetail(eventId: number) {
@@ -17,6 +18,7 @@ export function useEventDetail(eventId: number) {
   const handleDelete = async () => {
     try {
       await deleteEvent(eventId);
+      toast.success('Event deleted successfully');
       router.push('/events');
     } catch {
       // Error handled by store

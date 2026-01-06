@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useRegisterForm } from "../hooks";
@@ -26,11 +27,19 @@ export default function RegisterPage() {
     clearError,
   } = useRegisterForm();
 
+  // Clear error when component mounts or unmounts
+  useEffect(() => {
+    clearError();
+    return () => {
+      clearError();
+    };
+  }, [clearError]);
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-3xl text-center">Registro</CardTitle>
+          <CardTitle className="text-3xl text-center">Sign Up</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -38,7 +47,7 @@ export default function RegisterPage() {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nombre</Label>
+                <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
                   name="name"
@@ -75,7 +84,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
+                <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -86,7 +95,11 @@ export default function RegisterPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password123!"
-                    className="pr-10"
+                    className={`pr-10 ${
+                      validationErrors.password
+                        ? "border-destructive bg-destructive/10 focus-visible:ring-destructive"
+                        : ""
+                    }`}
                   />
                   <Button
                     type="button"
@@ -95,7 +108,7 @@ export default function RegisterPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     aria-label={
-                      showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                      showPassword ? "Hide password" : "Show password"
                     }
                   >
                     {showPassword ? (
@@ -106,24 +119,33 @@ export default function RegisterPage() {
                   </Button>
                 </div>
                 {validationErrors.password && (
-                  <p className="text-sm text-destructive">
-                    {validationErrors.password}
+                  <div className="rounded-md bg-destructive/10 border border-destructive/20 p-2">
+                    <p className="text-sm font-medium text-destructive">
+                      {validationErrors.password}
+                    </p>
+                  </div>
+                )}
+                {!validationErrors.password && (
+                  <p className="text-xs text-muted-foreground">
+                    Minimum 8 characters, one uppercase, one number and one
+                    special character (@$!%*?&)
                   </p>
                 )}
-                <p className="text-xs text-muted-foreground">
-                  Mínimo 8 caracteres, una mayúscula, un número y un carácter
-                  especial (@$!%*?&)
-                </p>
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Registrando..." : "Registrarse"}
+            <Button
+              type="submit"
+              className="w-full"
+              variant={"outline"}
+              disabled={isLoading}
+            >
+              {isLoading ? "Registering..." : "Sign Up"}
             </Button>
 
             <div className="text-center text-sm">
               <Link href="/login" className="text-primary hover:underline">
-                ¿Ya tienes cuenta? Inicia sesión
+                Already have an account? Sign in
               </Link>
             </div>
           </form>

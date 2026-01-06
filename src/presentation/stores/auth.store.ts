@@ -25,7 +25,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       await authService.login(credentials);
       set({ isAuthenticated: true, isLoading: false });
     } catch (error) {
-      const processedError = ErrorHandler.processError(error, 'Error al iniciar sesión');
+      const processedError = ErrorHandler.processError(error, 'Error signing in');
       set({
         error: processedError.message,
         isLoading: false,
@@ -41,7 +41,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       await authService.register(data);
       set({ isLoading: false });
     } catch (error) {
-      const processedError = ErrorHandler.processError(error, 'Error al registrar usuario');
+      const processedError = ErrorHandler.processError(error, 'Error registering user');
       set({
         error: processedError.message,
         isLoading: false,

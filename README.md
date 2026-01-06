@@ -1,147 +1,130 @@
 # Event Manager - Frontend
 
-Aplicación de escritorio desarrollada con Next.js para la gestión de eventos corporativos.
+Desktop application developed with Next.js for corporate event management.
 
-## Arquitectura
+## Architecture
 
-El proyecto implementa **Arquitectura Hexagonal** con las siguientes capas:
+The project implements **Hexagonal Architecture** with the following layers:
 
-- **Domain**: Entidades y interfaces de repositorios
-- **Application**: Casos de uso y servicios
-- **Infrastructure**: Implementaciones HTTP, configuración
-- **Presentation**: Componentes, páginas, stores (Zustand)
+- **Domain**: Entities and repository interfaces
+- **Application**: Use cases and services
+- **Infrastructure**: HTTP implementations, configuration
+- **Presentation**: Components, pages, stores (Zustand)
 
-## Requisitos
+## Requirements
 
-- Node.js 18+ 
-- npm o yarn
+- Node.js 18+
+- npm or yarn
 
-## Instalación
+## Installation
 
 ```bash
 npm install
 ```
 
-## Configuración
+## Configuration
 
-Crea un archivo `.env.local` en la raíz del proyecto:
+Create a `.env.local` file in the project root:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
-Si no defines `NEXT_PUBLIC_API_URL`, se usará `http://localhost:3000` por defecto.
+If `NEXT_PUBLIC_API_URL` is not defined, `http://localhost:3000` will be used by default.
 
-## Ejecución
+## Execution
 
-### Desarrollo
+### Development
 
 ```bash
 npm run dev
 ```
 
-La aplicación estará disponible en `http://localhost:3001` (o el puerto definido en `PORT` en `.env.local`).
+The application will be available at `http://localhost:3001` (or the port defined in `PORT` in `.env.local`).
 
-### Producción
+### Production
 
 ```bash
 npm run build
 npm start
 ```
 
-## Estructura del Proyecto
+## Project Structure
 
 ```
 event_maganer/
 ├── app/                          # Next.js App Router
-│   ├── login/                    # Pantalla de login
-│   ├── register/                 # Pantalla de registro
-│   ├── events/                   # Pantallas de eventos
-│   │   ├── page.tsx              # Lista de eventos
-│   │   ├── new/                  # Crear evento
-│   │   └── [id]/                 # Detalle y edición
+│   ├── login/                    # Login screen
+│   ├── register/                 # Registration screen
+│   ├── events/                   # Event screens
+│   │   ├── page.tsx              # Event list
+│   │   ├── new/                  # Create event
+│   │   └── [id]/                 # Detail and edit
 │   └── layout.tsx
 ├── src/
-│   ├── domain/                   # Capa de dominio
-│   │   ├── entities/             # Entidades del dominio
-│   │   └── repositories/         # Interfaces de repositorios
-│   ├── application/              # Capa de aplicación
-│   │   ├── use-cases/            # Casos de uso
-│   │   └── services/             # Servicios de aplicación
-│   ├── infrastructure/           # Capa de infraestructura
-│   │   ├── config/               # Configuración
-│   │   ├── http/                 # Cliente HTTP
-│   │   └── repositories/         # Implementaciones de repositorios
-│   └── presentation/            # Capa de presentación
-│       ├── components/           # Componentes reutilizables
-│       └── stores/                # Stores de Zustand
-└── public/                       # Archivos estáticos
+│   ├── domain/                   # Domain layer
+│   │   ├── entities/             # Domain entities
+│   │   └── repositories/         # Repository interfaces
+│   ├── application/              # Application layer
+│   │   ├── use-cases/            # Use cases
+│   │   └── services/            # Application services
+│   ├── infrastructure/           # Infrastructure layer
+│   │   ├── config/               # Configuration
+│   │   ├── http/                 # HTTP client
+│   │   └── repositories/         # Repository implementations
+│   └── presentation/            # Presentation layer
+│       ├── components/           # Reusable components
+│       └── stores/                # Zustand stores
+└── public/                       # Static files
 ```
-
-## Características
-
-### Pantallas Implementadas
-
-1. **Login Screen** (`/login`)
-   - Campos: Email y Contraseña
-   - Validación de campos obligatorios
-   - Manejo de errores
-
-2. **Registration Screen** (`/register`)
-   - Campos: Nombre, Email y Contraseña
-   - Validación de contraseña (mínimo 8 caracteres, mayúscula, número, carácter especial)
-   - Manejo de errores
-
-3. **Event List Screen** (`/events`)
-   - Lista todos los eventos
-   - Muestra nombre y fecha de cada evento
-   - Botón flotante para crear nuevo evento
-   - Navegación al detalle al hacer clic
-
-4. **Event Detail Screen** (`/events/[id]`)
-   - Muestra todos los detalles del evento
-   - Botones para Editar y Eliminar
-   - Confirmación antes de eliminar
-
-5. **Add/Edit Event Screen** (`/events/new` y `/events/[id]/edit`)
-   - Formulario con campos: nombre, fecha, descripción, lugar
-   - Selector de fecha y hora
-   - Validación de campos obligatorios
-   - Guardado y redirección a la lista
 
 ### State Management
 
-- **Zustand** para gestión de estado
-- Stores separados para autenticación y eventos
-- Manejo de estados de carga y errores
+- **Zustand** for state management
+- Separate stores for authentication and events
+- Loading and error state handling
 
-### Autenticación
+### Authentication
 
-- JWT almacenado en `localStorage`
-- Protección de rutas con `ProtectedRoute`
-- Redirección automática según estado de autenticación
+- JWT stored in `localStorage`
+- Route protection with `ProtectedRoute`
+- Automatic redirection based on authentication state
 
-### Manejo de Errores
+### Error Handling
 
-- Alertas de error visibles al usuario
-- Validación de formularios en cliente
-- Mensajes de error del servidor
+- Error alerts visible to users
+- Client-side form validation
+- Server error messages
+- Toast notifications for success and error actions
 
-## Tecnologías
+### Toast Notifications
+
+- Success toasts for:
+  - User registration
+  - User login
+  - Event creation
+  - Event update
+  - Event deletion
+- Error toasts for failed operations
+
+## Technologies
 
 - **Next.js 16** (App Router)
 - **TypeScript**
 - **Tailwind CSS v4**
 - **Zustand** (State Management)
+- **Sonner** (Toast Notifications)
 - **Fetch API** (HTTP Client)
+- **shadcn/ui** (UI Components)
 
-## Variables de Entorno
+## Environment Variables
 
-- `NEXT_PUBLIC_API_URL`: URL base de la API (default: `http://localhost:3000`)
-- `PORT`: Puerto del servidor de desarrollo (default: `3000`)
+- `NEXT_PUBLIC_API_URL`: Base URL of the API (default: `http://localhost:3000`)
+- `PORT`: Development server port (default: `3000`)
 
-## Notas
+## Notes
 
-- La aplicación requiere que el backend esté ejecutándose en el puerto configurado
-- Todas las rutas de eventos requieren autenticación JWT
-- El token se almacena en `localStorage` y se incluye automáticamente en las peticiones
+- The application requires the backend to be running on the configured port
+- All event routes require JWT authentication
+- The token is stored in `localStorage` and automatically included in requests
+- Toast notifications provide user feedback for all major actions

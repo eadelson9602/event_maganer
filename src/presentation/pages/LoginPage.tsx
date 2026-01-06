@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Eye, EyeOff } from "lucide-react";
@@ -23,11 +24,19 @@ export default function LoginPage() {
     clearError,
   } = useLoginForm();
 
+  // Clear error when component mounts or unmounts
+  useEffect(() => {
+    clearError();
+    return () => {
+      clearError();
+    };
+  }, [clearError]);
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-3xl text-center">Iniciar Sesión</CardTitle>
+          <CardTitle className="text-3xl text-center">Sign In</CardTitle>
         </CardHeader>
         <CardContent>
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -49,7 +58,7 @@ export default function LoginPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
+                <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -69,7 +78,7 @@ export default function LoginPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     aria-label={
-                      showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                      showPassword ? "Hide password" : "Show password"
                     }
                   >
                     {showPassword ? (
@@ -82,13 +91,18 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            <Button
+              type="submit"
+              variant={"outline"}
+              className="w-full"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing in..." : "Sign In"}
             </Button>
 
             <div className="text-center text-sm">
               <Link href="/register" className="text-primary hover:underline">
-                ¿No tienes cuenta? Regístrate
+                Don't have an account? Sign up
               </Link>
             </div>
           </form>

@@ -36,7 +36,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       const events = await eventService.getAllEvents(true, activeFilters);
       set({ events, isLoading: false, filters: activeFilters });
     } catch (error) {
-      const processedError = ErrorHandler.processError(error, 'Error al cargar eventos');
+      const processedError = ErrorHandler.processError(error, 'Error loading events');
       set({
         error: processedError.message,
         isLoading: false,
@@ -51,7 +51,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       const event = await eventService.getEventById(id);
       set({ currentEvent: event, isLoading: false });
     } catch (error) {
-      const processedError = ErrorHandler.processError(error, 'Error al cargar el evento');
+      const processedError = ErrorHandler.processError(error, 'Error loading event');
       set({
         error: processedError.message,
         isLoading: false,
@@ -68,7 +68,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       await get().fetchEvents();
       set({ isLoading: false });
     } catch (error) {
-      const processedError = ErrorHandler.processError(error, 'Error al crear el evento');
+      const processedError = ErrorHandler.processError(error, 'Error creating event');
       set({
         error: processedError.message,
         isLoading: false,
@@ -85,7 +85,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       await Promise.all([get().fetchEvents(), get().fetchEventById(id)]);
       set({ isLoading: false });
     } catch (error) {
-      const processedError = ErrorHandler.processError(error, 'Error al actualizar el evento');
+      const processedError = ErrorHandler.processError(error, 'Error updating event');
       set({
         error: processedError.message,
         isLoading: false,
@@ -102,7 +102,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       await get().fetchEvents();
       set({ isLoading: false, currentEvent: null });
     } catch (error) {
-      const processedError = ErrorHandler.processError(error, 'Error al eliminar el evento');
+      const processedError = ErrorHandler.processError(error, 'Error deleting event');
       set({
         error: processedError.message,
         isLoading: false,

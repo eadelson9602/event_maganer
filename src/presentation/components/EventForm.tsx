@@ -40,13 +40,13 @@ export default function EventForm({ eventId }: EventFormProps) {
             onClick={() => router.push('/events')}
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Volver a la lista
+            Back to list
           </Button>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>{eventId ? 'Editar Evento' : 'Nuevo Evento'}</CardTitle>
+            <CardTitle>{eventId ? 'Edit Event' : 'New Event'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -54,7 +54,7 @@ export default function EventForm({ eventId }: EventFormProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="name">
-                  Nombre <span className="text-destructive">*</span>
+                  Name <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="name"
@@ -70,7 +70,7 @@ export default function EventForm({ eventId }: EventFormProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="date">
-                  Fecha y Hora <span className="text-destructive">*</span>
+                  Date and Time <span className="text-destructive">*</span>
                 </Label>
                 <Input
                   id="date"
@@ -85,7 +85,7 @@ export default function EventForm({ eventId }: EventFormProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Descripción</Label>
+                <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   rows={4}
@@ -95,7 +95,7 @@ export default function EventForm({ eventId }: EventFormProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="place">Lugar</Label>
+                <Label htmlFor="place">Place</Label>
                 <Input
                   id="place"
                   type="text"
@@ -110,7 +110,7 @@ export default function EventForm({ eventId }: EventFormProps) {
                   disabled={isLoading}
                   className="flex-1"
                 >
-                  {isLoading ? 'Guardando...' : 'Guardar'}
+                  {isLoading ? 'Saving...' : 'Save'}
                 </Button>
                 <Button
                   type="button"
@@ -118,7 +118,7 @@ export default function EventForm({ eventId }: EventFormProps) {
                   onClick={() => router.push('/events')}
                   className="flex-1"
                 >
-                  Cancelar
+                  Cancel
                 </Button>
               </div>
             </form>

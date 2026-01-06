@@ -1,4 +1,5 @@
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useAuthStore } from '../../stores/auth.store';
 
 export function useAuth() {
@@ -9,6 +10,7 @@ export function useAuth() {
     clearError();
     try {
       await login(credentials);
+      toast.success('Login successful');
       router.push('/events');
     } catch {
       // Error is handled by the store
@@ -19,6 +21,7 @@ export function useAuth() {
     clearError();
     try {
       await register(data);
+      toast.success('User registered successfully');
       router.push('/login');
     } catch {
       // Error is handled by the store

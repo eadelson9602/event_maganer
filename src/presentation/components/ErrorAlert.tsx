@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ErrorAlertProps {
   message: string;
@@ -13,7 +13,7 @@ export default function ErrorAlert({ message, onClose }: ErrorAlertProps) {
   if (!message) return null;
 
   return (
-    <Alert variant="destructive" className="mb-4">
+    <Alert variant="destructive" className="mb-4 bg-red-400 text-white">
       <div className="flex items-center justify-between w-full">
         <div className="flex-1">
           <AlertTitle>Error</AlertTitle>
@@ -33,4 +33,3 @@ export default function ErrorAlert({ message, onClose }: ErrorAlertProps) {
     </Alert>
   );
 }
-

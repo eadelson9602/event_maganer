@@ -20,9 +20,9 @@ export default function EventsListPage() {
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-3xl font-bold">Eventos</h1>
+          <h1 className="text-3xl font-bold">Events</h1>
           <Button variant="outline" onClick={logout}>
-            Cerrar Sesión
+            Sign Out
           </Button>
         </div>
 
@@ -41,7 +41,7 @@ export default function EventsListPage() {
             {events.length === 0 ? (
               <Card>
                 <CardContent className="p-8 text-center">
-                  <p className="text-muted-foreground">No hay eventos disponibles</p>
+                  <p className="text-muted-foreground">No events available</p>
                 </CardContent>
               </Card>
             ) : (
@@ -75,7 +75,7 @@ export default function EventsListPage() {
               onClick={() => router.push('/events/new')}
               size="icon"
               className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg"
-              aria-label="Crear nuevo evento"
+              aria-label="Create new event"
             >
               <Plus className="h-6 w-6" />
             </Button>

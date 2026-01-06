@@ -45,13 +45,13 @@ export default function EventSearch({ filters, onSearch, onClear }: EventSearchP
     <Card className="mb-6">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Buscar Eventos</CardTitle>
+          <CardTitle className="text-lg">Search Events</CardTitle>
           <Button
             type="button"
             variant="ghost"
             size="icon"
             onClick={toggleExpanded}
-            aria-label={isExpanded ? 'Contraer búsqueda' : 'Expandir búsqueda'}
+            aria-label={isExpanded ? 'Collapse search' : 'Expand search'}
           >
             {isExpanded ? <X className="h-4 w-4" /> : <Search className="h-4 w-4" />}
           </Button>
@@ -62,29 +62,29 @@ export default function EventSearch({ filters, onSearch, onClear }: EventSearchP
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name">Nombre del evento</Label>
+                <Label htmlFor="name">Event name</Label>
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Buscar por nombre..."
+                  placeholder="Search by name..."
                   value={localFilters.name || ''}
                   onChange={(e) => updateFilter('name', e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="place">Lugar</Label>
+                <Label htmlFor="place">Place</Label>
                 <Input
                   id="place"
                   type="text"
-                  placeholder="Buscar por lugar..."
+                  placeholder="Search by place..."
                   value={localFilters.place || ''}
                   onChange={(e) => updateFilter('place', e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="startDate">Fecha desde</Label>
+                <Label htmlFor="startDate">Date from</Label>
                 <Input
                   id="startDate"
                   type="datetime-local"
@@ -94,7 +94,7 @@ export default function EventSearch({ filters, onSearch, onClear }: EventSearchP
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="endDate">Fecha hasta</Label>
+                <Label htmlFor="endDate">Date to</Label>
                 <Input
                   id="endDate"
                   type="datetime-local"
@@ -104,7 +104,7 @@ export default function EventSearch({ filters, onSearch, onClear }: EventSearchP
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="sortBy">Ordenar por</Label>
+                <Label htmlFor="sortBy">Sort by</Label>
                 <Select
                   value={localFilters.sortBy || 'date'}
                   onValueChange={(value) =>
@@ -112,28 +112,28 @@ export default function EventSearch({ filters, onSearch, onClear }: EventSearchP
                   }
                 >
                   <SelectTrigger id="sortBy">
-                    <SelectValue placeholder="Seleccionar campo" />
+                    <SelectValue placeholder="Select field" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="name">Nombre</SelectItem>
-                    <SelectItem value="date">Fecha</SelectItem>
-                    <SelectItem value="createdAt">Fecha de creación</SelectItem>
+                    <SelectItem value="name">Name</SelectItem>
+                    <SelectItem value="date">Date</SelectItem>
+                    <SelectItem value="createdAt">Creation date</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="sortOrder">Orden</Label>
+                <Label htmlFor="sortOrder">Order</Label>
                 <Select
                   value={localFilters.sortOrder || 'ASC'}
                   onValueChange={(value) => updateFilter('sortOrder', value as 'ASC' | 'DESC')}
                 >
                   <SelectTrigger id="sortOrder">
-                    <SelectValue placeholder="Seleccionar orden" />
+                    <SelectValue placeholder="Select order" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ASC">Ascendente</SelectItem>
-                    <SelectItem value="DESC">Descendente</SelectItem>
+                    <SelectItem value="ASC">Ascending</SelectItem>
+                    <SelectItem value="DESC">Descending</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -142,12 +142,12 @@ export default function EventSearch({ filters, onSearch, onClear }: EventSearchP
             <div className="flex gap-2">
               <Button type="submit" className="flex-1">
                 <Search className="mr-2 h-4 w-4" />
-                Buscar
+                Search
               </Button>
               {hasActiveFilters && (
                 <Button type="button" variant="outline" onClick={handleClear}>
                   <X className="mr-2 h-4 w-4" />
-                  Limpiar
+                  Clear
                 </Button>
               )}
             </div>

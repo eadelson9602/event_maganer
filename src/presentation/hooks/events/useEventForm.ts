@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useEventStore } from '../../stores/event.store';
 import { Event } from '../../../domain/entities/event.entity';
 
@@ -47,11 +48,11 @@ export function useEventForm(eventId?: number) {
     const errors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      errors.name = 'El nombre es obligatorio';
+      errors.name = 'Name is required';
     }
 
     if (!formData.date) {
-      errors.date = 'La fecha es obligatoria';
+      errors.date = 'Date is required';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -69,8 +70,10 @@ export function useEventForm(eventId?: number) {
 
       if (eventId) {
         await updateEvent(eventId, eventData);
+        toast.success('Event updated successfully');
       } else {
         await createEvent(eventData);
+        toast.success('Event created successfully');
       }
       router.push('/events');
     } catch {
