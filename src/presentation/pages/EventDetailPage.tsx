@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
-import { useEventStore } from '../stores/event.store';
+import { useEventDetail, useDateFormat } from '../hooks';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorAlert from '../components/ErrorAlert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,41 +25,14 @@ interface EventDetailPageProps {
 
 export default function EventDetailPage({ eventId }: EventDetailPageProps) {
   const router = useRouter();
-  const { currentEvent, isLoading, error, fetchEventById, deleteEvent, clearError } = useEventStore();
-
-  useEffect(() => {
-    if (eventId) {
-      fetchEventById(eventId).catch(() => {
-        // Error handled by store
-      });
-    }
-  }, [eventId, fetchEventById]);
-
-  const handleDelete = async () => {
-    try {
-      await deleteEvent(eventId);
-      router.push('/events');
-    } catch {
-      // Error handled by store
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
-  };
+  const { event, isLoading, error, deleteEvent, clearError } = useEventDetail(eventId);
+  const { formatDate } = useDateFormat();
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  if (!currentEvent) {
+  if (!event) {
     return (
       <div className="min-h-screen bg-background px-4 py-12">
         <div className="mx-auto max-w-2xl">
@@ -91,25 +63,25 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-3xl">{currentEvent.name}</CardTitle>
+            <CardTitle className="text-3xl">{event.name}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
               <h3 className="text-sm font-medium text-muted-foreground mb-1">Fecha y Hora</h3>
-              <p className="text-lg">{formatDate(currentEvent.date)}</p>
+              <p className="text-lg">{formatDate(event.date)}</p>
             </div>
 
-            {currentEvent.place && (
+            {event.place && (
               <div>
                 <h3 className="text-sm font-medium text-muted-foreground mb-1">Lugar</h3>
-                <p className="text-lg">{currentEvent.place}</p>
+                <p className="text-lg">{event.place}</p>
               </div>
             )}
 
-            {currentEvent.description && (
+            {event.description && (
               <div>
                 <h3 className="text-sm font-medium text-muted-foreground mb-1">Descripción</h3>
-                <p className="text-lg">{currentEvent.description}</p>
+                <p className="text-lg">{event.description}</p>
               </div>
             )}
 
@@ -138,7 +110,7 @@ export default function EventDetailPage({ eventId }: EventDetailPageProps) {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                    <AlertDialogAction onClick={deleteEvent} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
                       Eliminar
                     </AlertDialogAction>
                   </AlertDialogFooter>

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { eventService } from '../../application/services/event.service';
 import { Event } from '../../domain/entities/event.entity';
+import { EventFilters } from '../../domain/entities/event-filters.entity';
 import { HttpError } from '../../infrastructure/http/http-client';
 import { ErrorHandler } from '../../infrastructure/http/error-handler';
 
@@ -9,11 +10,14 @@ interface EventState {
   currentEvent: Event | null;
   isLoading: boolean;
   error: string | null;
-  fetchEvents: () => Promise<void>;
+  filters: EventFilters;
+  fetchEvents: (filters?: EventFilters) => Promise<void>;
   fetchEventById: (id: number) => Promise<void>;
   createEvent: (event: Omit<Event, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
   updateEvent: (id: number, event: Partial<Omit<Event, 'id' | 'createdAt' | 'updatedAt'>>) => Promise<void>;
   deleteEvent: (id: number) => Promise<void>;
+  setFilters: (filters: EventFilters) => void;
+  clearFilters: () => void;
   clearError: () => void;
   clearCurrentEvent: () => void;
 }
@@ -23,12 +27,14 @@ export const useEventStore = create<EventState>((set, get) => ({
   currentEvent: null,
   isLoading: false,
   error: null,
+  filters: {},
 
-  fetchEvents: async () => {
+  fetchEvents: async (filters?: EventFilters) => {
     set({ isLoading: true, error: null });
     try {
-      const events = await eventService.getAllEvents(true);
-      set({ events, isLoading: false });
+      const activeFilters = filters || get().filters;
+      const events = await eventService.getAllEvents(true, activeFilters);
+      set({ events, isLoading: false, filters: activeFilters });
     } catch (error) {
       const processedError = ErrorHandler.processError(error, 'Error al cargar eventos');
       set({
@@ -105,6 +111,8 @@ export const useEventStore = create<EventState>((set, get) => ({
     }
   },
 
+  setFilters: (filters: EventFilters) => set({ filters }),
+  clearFilters: () => set({ filters: {} }),
   clearError: () => set({ error: null }),
   clearCurrentEvent: () => set({ currentEvent: null }),
 }));

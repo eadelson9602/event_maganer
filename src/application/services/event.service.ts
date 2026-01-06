@@ -5,6 +5,7 @@ import { CreateEventUseCase } from '../use-cases/create-event.use-case';
 import { UpdateEventUseCase } from '../use-cases/update-event.use-case';
 import { DeleteEventUseCase } from '../use-cases/delete-event.use-case';
 import { Event } from '../../domain/entities/event.entity';
+import { EventFilters } from '../../domain/entities/event-filters.entity';
 
 class EventService {
   private eventRepository: EventRepository;
@@ -23,8 +24,8 @@ class EventService {
     this.deleteEventUseCase = new DeleteEventUseCase(this.eventRepository);
   }
 
-  async getAllEvents(simple: boolean = true): Promise<Event[]> {
-    return this.getEventsUseCase.execute(simple);
+  async getAllEvents(simple: boolean = true, filters?: EventFilters): Promise<Event[]> {
+    return this.getEventsUseCase.execute(simple, filters);
   }
 
   async getEventById(id: number): Promise<Event> {

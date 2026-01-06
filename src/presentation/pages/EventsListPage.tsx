@@ -1,36 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
-import { useEventStore } from '../stores/event.store';
-import { useAuthStore } from '../stores/auth.store';
+import { useEvents, useDateFormat } from '../hooks';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorAlert from '../components/ErrorAlert';
+import EventSearch from '../components/EventSearch';
+import { useAuth } from '../hooks';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function EventsListPage() {
   const router = useRouter();
-  const { events, isLoading, error, fetchEvents, clearError } = useEventStore();
-  const { logout } = useAuthStore();
-
-  useEffect(() => {
-    fetchEvents().catch(() => {
-      // Error handled by store
-    });
-  }, [fetchEvents]);
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    }).format(date);
-  };
+  const { events, isLoading, error, filters, search, clearFilters, clearError } = useEvents();
+  const { logout } = useAuth();
+  const { formatDate } = useDateFormat();
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,6 +27,12 @@ export default function EventsListPage() {
         </div>
 
         <ErrorAlert message={error || ''} onClose={clearError} />
+
+        <EventSearch
+          filters={filters}
+          onSearch={search}
+          onClear={clearFilters}
+        />
 
         {isLoading ? (
           <LoadingSpinner />
